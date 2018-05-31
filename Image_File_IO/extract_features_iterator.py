@@ -40,7 +40,7 @@ def extract_features_iterator(DIRECTORY_PATH, model = None, layer_name = None, i
             assert (array.shape[0] == output.shape[0])
             print("Output Array Shape: {} \n".format(output.shape))
             np.save(newFileName, output)
-
+            return (newFileName, output)
 
 
 def extract_features(images, model, extractor_functions, isWhiteboxExtraction):
