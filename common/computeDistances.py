@@ -30,6 +30,8 @@ def computeDistances(consumer_features, shop_features, metric=DistanceMetrics.L1
     if model is not None:
       assert isinstance(model, Model), "model must be a keras model"
       result = np.array([]).reshape((-1, shop_features.shape[0]))
+      num_batches = consumer_features.shape[0] // batchSize + 1
+      batch_iter = 1
       for start in range(0, consumer_features.shape[0], batchSize):
           last_index = min(consumer_features.shape[0], start + batchSize)
 
@@ -41,6 +43,8 @@ def computeDistances(consumer_features, shop_features, metric=DistanceMetrics.L1
           # We multiply by negative 1 since higher scores means they are more similar, aka negative of distance.
           similarity = -1 * similarity.reshape((consumer_batch.shape[0], -1))
 
+          print("Finished batch {} of {}".format(batch_iter, num_batches))
+          batch_iter +=1
           result = np.concatenate((result, similarity))
 
       return result

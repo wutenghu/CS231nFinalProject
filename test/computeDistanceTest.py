@@ -2,7 +2,7 @@ import unittest
 import numpy as np
 from keras.models import Model
 from keras.layers import Input, Dense
-from common.computeDistanceBetweenExtractedFeatures import *
+from common.computeDistances import *
 
 class TestComputeDistance(unittest.TestCase):
 
