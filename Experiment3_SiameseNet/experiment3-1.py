@@ -1,6 +1,8 @@
 import numpy as np
 from SiameseNetwork import GetSiameseNet
 from SiameseDataUtil import LoadData, ComputeDistance
+from common.computeDistanceBetweenExtractedFeatures import computeDistanceBetweenExtractedFeatures
+from common.computeAccuracy import computeAccuracy
 
 DATA_DIR = '.././img_npy_final_features_only/CLOTHING/LowerBody/'
 
@@ -22,6 +24,10 @@ hidden_dim = 2048
 model = GetSiameseNet(input_dim,hidden_dim)
 
 model.fit(distance, target, validation_split=.2)
+
+feat_distances = computeDistanceBetweenExtractedFeatures(consumer_features, shop_features, metric = 'cityblock', model=model, batchSize = 100)
+print (feat_distances.shape)
+
 
 
 
