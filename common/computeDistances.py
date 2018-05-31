@@ -25,7 +25,7 @@ def computeFeatureWiseMetric(consumer_batch, shop_features, metric):
 def computeDistances(consumer_features, shop_features, metric=DistanceMetrics.L1, model = None, batchSize = 100):
     assert isinstance(consumer_features, np.ndarray), 'Consumer features must be an numpy array of size n * d'
     assert isinstance(shop_features, np.ndarray), 'Shop features must be a numpy array of size m * d'
-    assert consumer_features.shape[1] == shop_features.shape[1], 'Distances must be a numpy array of consumer * shop'
+    assert consumer_features.shape[1] == shop_features.shape[1], 'Consumer and shop features must have same dimension'
 
     if model is not None:
       assert isinstance(model, Model), "model must be a keras model"
