@@ -1,13 +1,9 @@
-import scipy.spatial.distance as scidist
-from keras.applications import *
-from keras.preprocessing import image
-from keras.applications.vgg19 import preprocess_input
-from keras.models import Model
-import numpy as np
-import glob
-import matplotlib.pyplot as plt
-from skimage.transform import rescale, resize, downscale_local_mean
-import tensorflow as tf
+'''
+This Module simply contains functions to extract features from pre-trained models
+or do white box feature extraction
+
+'''
+
 from Image_File_IO.extract_features_iterator import extract_features_iterator
 
 
