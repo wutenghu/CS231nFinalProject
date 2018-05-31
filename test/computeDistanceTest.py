@@ -26,7 +26,7 @@ class TestComputeDistance(unittest.TestCase):
         self.model = self.createToyModel(self.consumer_features.shape[1])
 
     def testComputeManhattanDistance(self):
-        distances = computeDistances(self.consumer_features, self.shop_features, metric='cityblock')
+        distances = computeDistances(self.consumer_features, self.shop_features, metric=DistanceMetrics.L1)
         expected_distances = np.array([
             [0, 16, 8, 33],
             [16, 0, 14, 29],
@@ -42,7 +42,7 @@ class TestComputeDistance(unittest.TestCase):
             [16, 0, 14, 29],
             [8, 14, 0, 31]
         ])
-        output = computeDistances(self.consumer_features, self.shop_features, metric='cityblock', model=self.model, batchSize=2)
+        output = computeDistances(self.consumer_features, self.shop_features, metric=DistanceMetrics.L1, model=self.model, batchSize=2)
 
         np.testing.assert_array_equal(output, expected_distances)
 
@@ -54,7 +54,7 @@ class TestComputeDistance(unittest.TestCase):
             [78, 0, 98, 341],
             [24, 98, 0, 387]
         ])
-        output = computeDistances(self.consumer_features, self.shop_features, metric='euclidean', model=self.model, batchSize=2)
+        output = computeDistances(self.consumer_features, self.shop_features, metric=DistanceMetrics.L2, model=self.model, batchSize=2)
 
         np.testing.assert_array_equal(output, expected_distances)
 
