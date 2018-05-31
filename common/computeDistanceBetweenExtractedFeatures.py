@@ -1,6 +1,7 @@
 import numpy as np
 import scipy.spatial.distance as scidist
 from keras.models import Model
+from .DistanceMetrics import DistanceMetrics
 
 
 def computeFeatureWiseMetric(consumer_batch, shop_features, metric):
@@ -14,14 +15,14 @@ def computeFeatureWiseMetric(consumer_batch, shop_features, metric):
 
     diff = consumer_batch - shop_features
 
-    if metric == 'cityblock':
+    if metric == DistanceMetrics.L1:
         return np.abs(diff)
-    elif metric == 'euclidean':
+    elif metric == DistanceMetrics.L2:
         return np.square(diff)
     else:
         raise Exception("Invalid metric")
 
-def computeDistances(consumer_features, shop_features, metric='euclidean', model = None, batchSize = 100):
+def computeDistances(consumer_features, shop_features, metric=DistanceMetrics.L1, model = None, batchSize = 100):
     assert isinstance(consumer_features, np.ndarray), 'Consumer features must be an numpy array of size n * d'
     assert isinstance(shop_features, np.ndarray), 'Shop features must be a numpy array of size m * d'
     assert consumer_features.shape[1] == shop_features.shape[1], 'Distances must be a numpy array of consumer * shop'
@@ -45,4 +46,8 @@ def computeDistances(consumer_features, shop_features, metric='euclidean', model
       return result
 
     else:
-      return scidist.cdist(consumer_features, shop_features, metric=metric)
+      if(metric == DistanceMetrics.L1):
+          metric_string = 'cityblock'
+      elif(metric == DistanceMetrics.L2):
+          metric_string = 'euclidean'
+      return scidist.cdist(consumer_features, shop_features, metric=metric_string)

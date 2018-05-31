@@ -27,3 +27,5 @@ model.fit(distance, target, validation_split=.2)
 
 
 
+
+
