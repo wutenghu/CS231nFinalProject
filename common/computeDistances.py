@@ -28,6 +28,7 @@ def computeDistances(consumer_features, shop_features, metric=DistanceMetrics.L1
     assert consumer_features.shape[1] == shop_features.shape[1], 'Consumer and shop features must have same dimension'
 
     if model is not None:
+      print("Computing Trained Model based distance metric")
       assert isinstance(model, Model), "model must be a keras model"
       result = np.array([]).reshape((-1, shop_features.shape[0]))
       num_batches = consumer_features.shape[0] // batchSize + 1
@@ -50,6 +51,7 @@ def computeDistances(consumer_features, shop_features, metric=DistanceMetrics.L1
       return result
 
     else:
+      print("Computing Vanilla Distance Metric")
       if(metric == DistanceMetrics.L1):
           metric_string = 'cityblock'
       elif(metric == DistanceMetrics.L2):
