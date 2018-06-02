@@ -71,7 +71,7 @@ def ComputeDistance(data, pairs=None, triplets=None, metric = DistanceMetrics.L1
 			return np.abs(difference)
 
 		elif metric == DistanceMetrics.L2:
-			difference = np.sqrt(np.power(consumer - shop),2))
+			difference = np.sqrt(np.power((consumer - shop),2))
 			return difference
 
 		elif metric == DistanceMetrics.Cosine:
@@ -89,8 +89,8 @@ def ComputeDistance(data, pairs=None, triplets=None, metric = DistanceMetrics.L1
 			return np.abs(distance_positive - distance_negative)
 
 		elif metric == DistanceMetrics.L2:
-			distance_positive = np.sqrt(np.power(consumer - shop_pos),2))
-			distance_negative = np.sqrt(np.power(consumer - shop_neg),2))
+			distance_positive = np.sqrt(np.power((consumer - shop_pos),2))
+			distance_negative = np.sqrt(np.power((consumer - shop_neg),2))
 			return distance_positive - distance_negative
 
 		elif metric == DistanceMetrics.Cosine:
