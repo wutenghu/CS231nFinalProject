@@ -1,4 +1,5 @@
 import numpy as np
+from common.DistanceMetrics import DistanceMetrics
 
 def LoadData(consumer_features, consumer_labels, shop_features, shop_labels, pairs=None, triplets=None):
 	if pairs == True:
@@ -55,7 +56,7 @@ def LoadData(consumer_features, consumer_labels, shop_features, shop_labels, pai
 		print (np.asarray(triplets_2.shape))
 		return [np.asarray(triplets_0), np.asarray(triplets_1), np.asarray(triplets_2)]
 
-def ComputeDistance(data, pairs=None, triplets=None, metric='L1'):
+def ComputeDistance(data, pairs=None, triplets=None, metric = DistanceMetrics.L1):
 	'''
 		data (pairs)  ((N,dim), (N,dim))
 		data (triplets) ((N,dim), (N,dim), (N,dim))
@@ -65,17 +66,35 @@ def ComputeDistance(data, pairs=None, triplets=None, metric='L1'):
 		consumer = data[0]
 		shop = data[1]
 		assert consumer.shape == shop.shape
-		if metric == 'L1':
+		if metric == DistanceMetrics.L1:
 			difference = consumer - shop
 			return np.abs(difference)
+
+		elif metric == DistanceMetrics.L2:
+			difference = np.sqrt(np.power(consumer - shop),2))
+			return difference
+
+		elif metric == DistanceMetrics.Cosine:
+			difference = 1 - consumer*shop
+			return difference
 
 	if triplets==True:
 		consumer = data[0]
 		shop_pos = data[1]
 		shop_neg = data[2]
 
-		if metric == 'L1':
+		if metric == DistanceMetrics.L1:
 			distance_positive = consumer - shop_pos
 			distance_negative = consumer - shop_neg
 			return np.abs(distance_positive - distance_negative)
+
+		elif metric == DistanceMetrics.L2:
+			distance_positive = np.sqrt(np.power(consumer - shop_pos),2))
+			distance_negative = np.sqrt(np.power(consumer - shop_neg),2))
+			return distance_positive - distance_negative
+
+		elif metric == DistanceMetrics.Cosine:
+			distance_positive = 1 - consumer*shop_pos
+			distance_negative = 1 - consumer*shop_neg
+			return distance_positive - distance_negative
 

@@ -10,11 +10,13 @@ def GetSiameseNet(input_dim, hidden_dim, final_activation = 'sigmoid'):
 	input = Input(shape=(input_dim,))
 	output = Dense(hidden_dim, activation='relu')(input)
 
+	# sigmoid loss
 	if final_activation == 'sigmoid':
 		output = Dense(1, activation='sigmoid')(output)
 		siamese_net = Model(inputs=input, outputs=output)
 		siamese_net.compile(optimizer='rmsprop', loss='binary_crossentropy', metrics=['binary_accuracy'])	
 
+	# contrastive loss
 	elif final_activation == 'svm':
 		output = Dense(1, activation='linear')(output)
 		siamese_net = Model(inputs=input, outputs=output)
