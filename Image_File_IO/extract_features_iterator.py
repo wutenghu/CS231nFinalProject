@@ -10,7 +10,7 @@ from common.helpers.concatenate_extracted_features_with_feature_functions import
 POSSIBLE_CATEGORIES = ['Dress', 'Skirt', 'UpperBody', 'LowerBody']
 
 
-def extract_features_iterator(DIRECTORY_PATH, model = None, layer_name = None, includedCategories=['Dress', 'Skirt', 'UpperBody', 'LowerBody'], imageReshape = None, isWhiteboxExtraction = True, extractor_functions = None):
+def extract_features_iterator(DIRECTORY_PATH, model = None, layer_name = None, layer_index= None, includedCategories=['Dress', 'Skirt', 'UpperBody', 'LowerBody'], imageReshape = None, isWhiteboxExtraction = True, extractor_functions = None):
     if(isWhiteboxExtraction):
         print("Extracting Whitebox features")
         assert isinstance(extractor_functions, list)
@@ -18,7 +18,11 @@ def extract_features_iterator(DIRECTORY_PATH, model = None, layer_name = None, i
     else:
         print("Extracting Pre-trained features")
         file_ext = "_" + model.name + "_features"
-        model = Model(inputs=model.input, outputs=model.get_layer(layer_name).output)
+        if layer_name is not None:
+            model = Model(inputs=model.input, outputs=model.get_layer(layer_name).output)
+        elif layer_index is not None:
+            model = Model(inputs=model.input, outputs=model.layers[layer_index].output)
+
 
     for filename in glob.iglob(DIRECTORY_PATH + '/**/*_photos.npy', recursive=True):
         array = np.load(filename).transpose([0, 2, 3, 1])
