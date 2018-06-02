@@ -2,7 +2,11 @@ import numpy as np
 from SiameseNetwork import GetSiameseNet
 from SiameseDataUtil import LoadData, ComputeDistance
 
-DATA_DIR = '.././img_npy_final_features_only/CLOTHING/LowerBody/'
+from common.computeDistanceBetweenExtractedFeatures import computeDistances
+from common.computeAccuracy import computeAccuracy
+from common.DistanceMetrics import DistanceMetrics
+
+DATA_DIR = './img_npy_final_features_only/CLOTHING/LowerBody/'
 
 consumer_features = np.load(DATA_DIR + 'consumer_ResNet50_features.npy')
 consumer_labels = np.load(DATA_DIR + 'consumer_labels.npy')
@@ -22,6 +26,10 @@ hidden_dim = 2048
 model = GetSiameseNet(input_dim,hidden_dim)
 
 model.fit(distance, target, validation_split=.2)
+
+feat_distances = computeDistances(consumer_features, shop_features, metric = DistanceMetrics.L1, model=model, batchSize = 100)
+print (feat_distances.shape)
+
 
 
 
