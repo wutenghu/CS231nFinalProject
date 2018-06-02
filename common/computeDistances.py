@@ -25,11 +25,14 @@ def computeFeatureWiseMetric(consumer_batch, shop_features, metric):
 def computeDistances(consumer_features, shop_features, metric=DistanceMetrics.L1, model = None, batchSize = 100):
     assert isinstance(consumer_features, np.ndarray), 'Consumer features must be an numpy array of size n * d'
     assert isinstance(shop_features, np.ndarray), 'Shop features must be a numpy array of size m * d'
-    assert consumer_features.shape[1] == shop_features.shape[1], 'Distances must be a numpy array of consumer * shop'
+    assert consumer_features.shape[1] == shop_features.shape[1], 'Consumer and shop features must have same dimension'
 
     if model is not None:
+      print("Computing Trained Model based distance metric")
       assert isinstance(model, Model), "model must be a keras model"
       result = np.array([]).reshape((-1, shop_features.shape[0]))
+      num_batches = consumer_features.shape[0] // batchSize + 1
+      batch_iter = 1
       for start in range(0, consumer_features.shape[0], batchSize):
           last_index = min(consumer_features.shape[0], start + batchSize)
 
@@ -41,11 +44,14 @@ def computeDistances(consumer_features, shop_features, metric=DistanceMetrics.L1
           # We multiply by negative 1 since higher scores means they are more similar, aka negative of distance.
           similarity = -1 * similarity.reshape((consumer_batch.shape[0], -1))
 
+          print("Finished batch {} of {}".format(batch_iter, num_batches))
+          batch_iter +=1
           result = np.concatenate((result, similarity))
 
       return result
 
     else:
+      print("Computing Vanilla Distance Metric")
       if(metric == DistanceMetrics.L1):
           metric_string = 'cityblock'
       elif(metric == DistanceMetrics.L2):

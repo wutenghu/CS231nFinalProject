@@ -8,7 +8,6 @@ def computeAccuracy(distances, consumer_labels, shop_labels, k = 20):
     assert isinstance(distances, np.ndarray), 'Distances must be a numpy array of consumer * shop'
     assert isinstance(consumer_labels, np.ndarray), 'Consumer labels must be a numpy array of size (n,)'
     assert isinstance(shop_labels, np.ndarray), 'Shop labels must be a numpy array of size (m,)'
-    assert distances.ndim == 2, 'Distances must be a numpy array of consumer * shop'
     assert distances.shape == (consumer_labels.shape[0], shop_labels.shape[0]), 'Distances shape must be (# consumer labels by # shop labels)'
 
     closest_k_shop_photos = distances.argsort(axis=1)[:, :k]
