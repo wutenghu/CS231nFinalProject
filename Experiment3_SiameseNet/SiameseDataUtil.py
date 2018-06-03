@@ -1,18 +1,19 @@
 import numpy as np
-from common.DistanceMetrics import DistanceMetrics
+from common.DistanceMetrics import DistanceMetrics, LossType
 
-def LoadData(consumer_features, consumer_labels, shop_features, shop_labels, pairs=None, triplets=None):
+def LoadData(consumer_features, consumer_labels, shop_features, shop_labels, pairs=None, triplets=None, lossType = None):
 	if pairs == True:
 		pairs_0 = []
 		pairs_1 = []
 		targets= [] #np.zeros((N,))
 		index_metadata = []
+		metadata_by_consumer_image_index = []
 
-		i = 0
 		for j,c in enumerate(consumer_features):
-			# print ("i:", i)
-			# print ("j:", j)
+			print("Generating pairs for {}".format(j))
 			shop_images_idx = np.where(shop_labels == consumer_labels[j])
+			metadata_by_consumer_image_index.append({})
+			metadata_by_consumer_image_index[j]['same'] = []
 			for s in shop_images_idx[0]:
 				# print ("s:", s)
 				#pairs[0][i,:] = c
@@ -23,23 +24,27 @@ def LoadData(consumer_features, consumer_labels, shop_features, shop_labels, pai
 				pairs_1.append(shop_features[s])
 				targets.append(1)
 				index_metadata.append((j, s))
-				i +=1
+				metadata_by_consumer_image_index[j]['same'].append(s)
 
-			shop_images_idx_neg = np.where(shop_labels != consumer_labels[j])[0][0:10]
+			shop_images_idx_neg = np.where(shop_labels != consumer_labels[j])[0][0:500]
 			# print ("shop_images_idx_neg", list(shop_images_idx_neg))
 			# add neagtive samples
+			metadata_by_consumer_image_index[j]['different'] = []
 			for s in shop_images_idx_neg:
 				#pairs[0][i,:] = c
 				pairs_0.append(c)
 				#pairs[1][i,:] = shop_features[s]
 				pairs_1.append(shop_features[s])
-				targets.append(0)
+				if (lossType == LossType.BinaryCrossEntropy):
+					targets.append(0)
+				elif (lossType == LossType.SVM):
+					targets.append(-1)
+				else:
+					raise Exception("Invalid loss type. Need to generated labels")
 				index_metadata.append((j, s))
-				i+=1
+				metadata_by_consumer_image_index[j]['different'].append(s)
 
-		print (np.asarray(pairs_0).shape)
-		print (np.asarray(pairs_1).shape)
-		return [np.asarray(pairs_0), np.asarray(pairs_1)], np.asarray(targets), index_metadata
+		return [np.asarray(pairs_0), np.asarray(pairs_1)], np.asarray(targets), np.asarray(index_metadata), metadata_by_consumer_image_index
 
 	if triplets == True:
 		triplets_0 = []
@@ -64,6 +69,7 @@ def ComputeDistance(data, pairs=None, triplets=None, metric = DistanceMetrics.L1
 		data (pairs)  ((N,dim), (N,dim))
 		data (triplets) ((N,dim), (N,dim), (N,dim))
 	'''
+	print("Input data dimension: {}".format(data[0].shape))
 
 	if pairs == True:
 		consumer = data[0]
@@ -74,7 +80,7 @@ def ComputeDistance(data, pairs=None, triplets=None, metric = DistanceMetrics.L1
 			return np.abs(difference)
 
 		elif metric == DistanceMetrics.L2:
-			difference = np.sqrt(np.power((consumer - shop),2))
+			difference = np.power((consumer - shop),2)
 			return difference
 
 		elif metric == DistanceMetrics.Cosine:
