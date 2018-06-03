@@ -31,7 +31,6 @@ def extract_features_iterator(DIRECTORY_PATH, model = None, layer_name = None, l
         subCategory = name[-2]
         if subCategory not in POSSIBLE_CATEGORIES or subCategory in includedCategories:
             newFileName = "/".join(name[:-1]) + "/" + photo_type + file_ext
-            print(newFileName)
             print("Input file {}, Array Shape: {} \n".format(filename, array.shape))
 
             if(imageReshape is not None):
@@ -44,7 +43,6 @@ def extract_features_iterator(DIRECTORY_PATH, model = None, layer_name = None, l
             assert (array.shape[0] == output.shape[0])
             print("Output Array Shape: {} \n".format(output.shape))
             np.save(newFileName, output)
-            return (newFileName, output)
 
 
 def extract_features(images, model, extractor_functions, isWhiteboxExtraction):
