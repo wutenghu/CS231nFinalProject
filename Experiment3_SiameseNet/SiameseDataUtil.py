@@ -6,6 +6,7 @@ def LoadData(consumer_features, consumer_labels, shop_features, shop_labels, pai
 		pairs_0 = []
 		pairs_1 = []
 		targets= [] #np.zeros((N,))
+		index_metadata = []
 
 		i = 0
 		for j,c in enumerate(consumer_features):
@@ -21,6 +22,7 @@ def LoadData(consumer_features, consumer_labels, shop_features, shop_labels, pai
 				#pairs[1][i,:] = shop_features[s]
 				pairs_1.append(shop_features[s])
 				targets.append(1)
+				index_metadata.append((j, s))
 				i +=1
 
 			shop_images_idx_neg = np.where(shop_labels != consumer_labels[j])[0][0:10]
@@ -32,11 +34,12 @@ def LoadData(consumer_features, consumer_labels, shop_features, shop_labels, pai
 				#pairs[1][i,:] = shop_features[s]
 				pairs_1.append(shop_features[s])
 				targets.append(0)
+				index_metadata.append((j, s))
 				i+=1
 
 		print (np.asarray(pairs_0).shape)
 		print (np.asarray(pairs_1).shape)
-		return [np.asarray(pairs_0), np.asarray(pairs_1)], np.asarray(targets)
+		return [np.asarray(pairs_0), np.asarray(pairs_1)], np.asarray(targets), index_metadata
 
 	if triplets == True:
 		triplets_0 = []
@@ -89,8 +92,8 @@ def ComputeDistance(data, pairs=None, triplets=None, metric = DistanceMetrics.L1
 			return np.abs(distance_positive - distance_negative)
 
 		elif metric == DistanceMetrics.L2:
-			distance_positive = np.sqrt(np.power((consumer - shop_pos),2))
-			distance_negative = np.sqrt(np.power((consumer - shop_neg),2))
+			distance_positive = np.power((consumer - shop_pos),2)
+			distance_negative = np.power((consumer - shop_neg),2)
 			return distance_positive - distance_negative
 
 		elif metric == DistanceMetrics.Cosine:
