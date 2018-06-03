@@ -6,11 +6,12 @@ import numpy as np
 directory = "/Users/ckanitkar/Desktop/img_npy_final/"
 
 
-models = [VGG16(), VGG19(), DenseNet201()]
-layers  = ["fc1", "fc1", "avg_pool"]
+model = VGG19()
+layer_name  = ["fc1"]
+includedCategories = []
 
-for model, layer_name in zip(models, layers):
-    print(model.name)
-    extract_features_pre_trained(directory, imageReshape = 224, model = model, layer_name=layer_name)
+
+print(model.name)
+extract_features_pre_trained(directory, includedCategories = includedCategories, imageReshape = 224, model = model, layer_name=layer_name)
 
 
