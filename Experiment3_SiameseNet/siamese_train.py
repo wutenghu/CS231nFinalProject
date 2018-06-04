@@ -36,7 +36,7 @@ for metric, lossType in zip(metrics, lossTypes):
 
 	for optimizer in optimizers:
 		print ("optimizer:", optimizer)
-		model = GetSiameseNet(input_dim,hidden_dim, final_activation = 'sigmoid', optimizer = optimizer)
+		model = GetSiameseNet(input_dim,hidden_dim, lossType = lossType, optimizer = optimizer)
 
 		#batch_size=32
 		H = model.fit(distance, target, validation_split=.2, epochs = 10, class_weight = {1: 500, 0: 1})
