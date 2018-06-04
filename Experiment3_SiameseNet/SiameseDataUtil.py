@@ -2,12 +2,17 @@ import numpy as np
 from common.Enums import DistanceMetrics, LossType
 
 def generatePairs(consumer_features, consumer_labels, shop_features, shop_labels, lossType):
+	assert consumer_features.shape[0] == consumer_labels.shape[0] and \
+			consumer_features.shape[1] == shop_features.shape[1] and \
+			shop_features.shape[0] == shop_labels.shape[0], "Invalid data size"
+
 	pairs_0 = []
 	pairs_1 = []
 	targets= [] #np.zeros((N,))
 	index_metadata = []
 
 	for j,c in enumerate(consumer_features):
+		print("Generating pairs for consumer image {}".format(j))
 		shop_images_idx = np.where(shop_labels == consumer_labels[j])[0]
 		for s in shop_images_idx:
 			pairs_0.append(c)
@@ -37,6 +42,7 @@ def computeDistanceForPairs(data, metric = DistanceMetrics.L1):
 		data (triplets) ((N,dim), (N,dim), (N,dim))
 	'''
 	assert isinstance(data, list) and len(data) == 2, 'Data must be a list of pairs. With 1st being consumer, and second being shop'
+	print("Computing distances for {} pairs".format(data[0].shape[0]))
 
 	consumer = data[0]
 	shop = data[1]

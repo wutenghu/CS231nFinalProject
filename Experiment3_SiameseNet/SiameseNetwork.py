@@ -4,9 +4,10 @@ from keras.regularizers import l2
 from keras import backend as K
 from keras.optimizers import SGD,Adam,RMSprop
 from keras.losses import binary_crossentropy
+from common.Enums import LossType
 
 
-def GetSiameseNet(input_dim, hidden_dim, final_activation = 'sigmoid', optimizer = 'adam'):
+def GetSiameseNet(input_dim, hidden_dim, lossType, optimizer = 'adam'):
 	input = Input(shape=(input_dim,))
 	output = Dense(hidden_dim, activation='relu')(input)
 
@@ -19,15 +20,17 @@ def GetSiameseNet(input_dim, hidden_dim, final_activation = 'sigmoid', optimizer
 		optimizer = Adam(lr = 0.001)
 
 	# sigmoid loss
-	if final_activation == 'sigmoid':
+	if lossType == LossType.BinaryCrossEntropy:
 		output = Dense(1, activation='sigmoid')(output)
 		siamese_net = Model(inputs=input, outputs=output)
 		siamese_net.compile(optimizer=optimizer, loss='binary_crossentropy')
 
 	# contrastive loss
-	elif final_activation == 'svm':
+	elif lossType == LossType.SVM:
 		output = Dense(1, activation='linear')(output)
 		siamese_net = Model(inputs=input, outputs=output)
 		siamese_net.compile(optimizer=optimizer, loss='binary_hinge')
 
+	else:
+		raise Exception("Must provide a loss type")
 	return siamese_net

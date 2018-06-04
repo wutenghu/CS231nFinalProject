@@ -1,11 +1,11 @@
 import numpy as np
 from SiameseNetwork import GetSiameseNet
 from SiameseDataUtil import generatePairs, computeDistanceForPairs
-from common.Enums import DistanceMetrics
+from common.Enums import DistanceMetrics, LossType
 import time
 
-DATA_DIR = './img_npy_final_features_only/DRESSES/Skirt/'
-PAIRS = True
+DATA_DIR = '/Users/ckanitkar/Desktop/img_npy_final_features_only/DRESSES/Skirt/'
+
 
 consumer_features = np.load(DATA_DIR + 'consumer_ResNet50_features.npy')
 consumer_labels = np.load(DATA_DIR + 'consumer_labels.npy')
@@ -21,11 +21,12 @@ print (shop_labels.shape)
 
 timestr = time.strftime("%Y%m%d-%H%M%S")
 
-metrics = [DistanceMetrics.L1] #, DistanceMetrics.L2, DistanceMetrics.Cosine] 
+metrics = [DistanceMetrics.L1] #, DistanceMetrics.L2, DistanceMetrics.Cosine]
+lossTypes = [LossType.SVM]
 optimizers = ['sgd'] #, 'rmsprop', 'adam']
 
-for metric in metrics:
-	pair, target = generatePairs(consumer_features, consumer_labels, shop_features, shop_labels, pairs=True)
+for metric, lossType in zip(metrics, lossTypes):
+	pair, target, _ = generatePairs(consumer_features, consumer_labels, shop_features, shop_labels, lossType = lossType)
 	distance = computeDistanceForPairs(pair, metric = metric)
 
 	input_dim = consumer_features.shape[-1]
