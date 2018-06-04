@@ -31,4 +31,4 @@ def computeAccuracy(consumer_features, shop_features, consumer_labels, shop_labe
     assert metric is not None, 'Must specify a metric'
 
     distances = computeDistances(consumer_features, shop_features, metric, model, batchSize)
-    return computeAccuracyUsingDistances(distances, consumer_labels, shop_labels)
+    return computeAccuracyUsingDistances(distances, consumer_labels, shop_labels, k)
