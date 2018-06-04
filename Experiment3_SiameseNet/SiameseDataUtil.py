@@ -53,3 +53,7 @@ def ComputeDistance(data, metric = DistanceMetrics.L1):
 		difference = 1 - consumer*shop
 		return difference
 
+	else:
+		raise Exception("Must use a valid distance metric")
+
+
