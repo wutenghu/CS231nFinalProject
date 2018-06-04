@@ -14,16 +14,21 @@ class TestComputeAccuracy(unittest.TestCase):
         self.consumer_labels = np.array(['id_2', 'id_1', 'id_3'])
 
     def testAccuracyKEquals1(self):
-        correct, total, accuracy = computeAccuracyUsingDistances(self.distances, self.consumer_labels, self.shop_labels, k = 1)
-        self.assertEqual((correct, total, accuracy), (1, 3, 1/3))
+        accuracies = computeAccuracyUsingDistances(self.distances, self.consumer_labels, self.shop_labels, k = [1])
+        self.assertEqual(accuracies[0], (1, 3, 1/3))
 
     def testAccuracyKEquals2(self):
-        correct, total, accuracy = computeAccuracyUsingDistances(self.distances, self.consumer_labels, self.shop_labels, k = 2)
-        self.assertEqual((correct, total, accuracy), (2, 3, 2/3))
+        accuracies = computeAccuracyUsingDistances(self.distances, self.consumer_labels, self.shop_labels, k = [2])
+        self.assertEqual(accuracies[0], (2, 3, 2/3))
 
     def testAccuracyKEquals4(self):
-        correct, total, accuracy = computeAccuracyUsingDistances(self.distances, self.consumer_labels, self.shop_labels, k=4)
-        self.assertEqual((correct, total, accuracy), (3, 3, 1))
+        accuracies = computeAccuracyUsingDistances(self.distances, self.consumer_labels, self.shop_labels, k=[4])
+        self.assertEqual(accuracies[0], (3, 3, 1))
+
+    def testAccuracyKEquals3and4(self):
+        accuracies = computeAccuracyUsingDistances(self.distances, self.consumer_labels, self.shop_labels, k=[4, 3])
+        self.assertEqual(accuracies[0], (3, 3, 1))
+        self.assertEqual(accuracies[1], (2, 3, 2/3))
 
 
 if __name__ == '__main__':
