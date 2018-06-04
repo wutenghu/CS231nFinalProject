@@ -1,14 +1,14 @@
 import numpy as np
 from SiameseNetwork import GetSiameseNet
-from SiameseDataUtil import LoadData, ComputeDistance
+from SiameseDataUtil import LoadData, ComputeDistance, DataGenerator
 from common.DistanceMetrics import DistanceMetrics
 import time
 
 DATA_DIR = './img_npy_final_features_only/DRESSES/Skirt/'
 PAIRS = True
 
-consumer_features = np.load(DATA_DIR + 'consumer_ResNet50_features.npy')
-consumer_labels = np.load(DATA_DIR + 'consumer_labels.npy')
+consumer_features = np.load(DATA_DIR + 'train_consumer_ResNet50_features.npy')
+consumer_labels = np.load(DATA_DIR + 'train_consumer_labels.npy')
 shop_features = np.load(DATA_DIR + 'shop_ResNet50_features.npy')
 shop_labels = np.load(DATA_DIR + 'shop_labels.npy')
 
@@ -28,7 +28,7 @@ optimizers = ['sgd'] #, 'rmsprop', 'adam']
 for metric in metrics:
 
 	if PAIRS:
-		data, target, metadata = LoadData(consumer_features[0:500], consumer_labels[0:500], shop_features, shop_labels, pairs=True)
+		data, target, metadata = LoadData(consumer_features, consumer_labels, shop_features, shop_labels, pairs=True)
 		distance = ComputeDistance(data, pairs=True, metric = metric)
 
 	else:
@@ -49,12 +49,12 @@ for metric in metrics:
 			#batch_size=32
 			H = model.fit(distance, target, validation_split=.2, epochs = 3, class_weight = {1:500, 0:1})
 			model_json = model.to_json()
-			model.save_weights("model_500_weighted"+ str(metric)+"_"+activation+"_"+optimizer+"_"+timestr+".h5")
+			model.save_weights("model_weighted"+ str(metric)+"_"+activation+"_"+optimizer+"_"+timestr+".h5")
 
 			#TODO: Print loss and accuracy
 
 			if PAIRS:
-				with open("model_500_weighted"+ str(metric)+"_"+activation+"_"+optimizer+"_"+timestr+".json", "w") as json_file:
+				with open("model_weighted"+ str(metric)+"_"+activation+"_"+optimizer+"_"+timestr+".json", "w") as json_file:
 					json_file.write(model_json)
 			else:
 				with open("model_triplet_"+ str(metric)+"_" +activation+"_"+optimizer+"_"+timestr+".json", "w") as json_file:

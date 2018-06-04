@@ -28,8 +28,8 @@ print("Loaded model from disk")
 
 DATA_DIR = './img_npy_final_features_only/DRESSES/Skirt/'
 
-consumer_features = np.load(DATA_DIR + 'consumer_ResNet50_features.npy')
-consumer_labels = np.load(DATA_DIR + 'consumer_labels.npy')
+consumer_features = np.load(DATA_DIR + 'test_consumer_ResNet50_features.npy')
+consumer_labels = np.load(DATA_DIR + 'test_consumer_labels.npy')
 shop_features = np.load(DATA_DIR + 'shop_ResNet50_features.npy')
 shop_labels = np.load(DATA_DIR + 'shop_labels.npy')
 
@@ -45,7 +45,7 @@ top_k = [3,10,20,30,40,50]
 for metric in metrics:
 	print ("metric:", metric)
 	if PAIRS:
-		data, target, index_metadata = LoadData(consumer_features[0:500], consumer_labels[0:500], shop_features, shop_labels, pairs=True)
+		data, target, index_metadata = LoadData(consumer_features, consumer_labels, shop_features, shop_labels, pairs=True)
 		distance = ComputeDistance(data, pairs=True, metric = metric)
 	else:
 		data, target = LoadData(consumer_features, consumer_labels, shop_features, shop_labels, triplets=True)
@@ -60,11 +60,11 @@ for metric in metrics:
 	print (confusion_matrix(target, preds))
 	print (precision_recall_fscore_support(target, preds, average='weighted'))
 	
-	feat_distances = computeDistances(consumer_features[0:500], shop_features, metric = metric, model=model, batchSize = 100)
+	feat_distances = computeDistances(consumer_features, shop_features, metric = metric, model=model, batchSize = 100)
 	# print (feat_distances.shape)
 
 	for k in top_k:
-		correct, total, accuracy = computeAccuracy(feat_distances, consumer_labels[0:500], shop_labels, k = k)
+		correct, total, accuracy = computeAccuracy(feat_distances, consumer_labels, shop_labels, k = k)
 		print ("Top" + str(k) + "accuracy:", accuracy)
 
 	
