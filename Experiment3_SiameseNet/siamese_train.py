@@ -2,6 +2,7 @@ import numpy as np
 from SiameseNetwork import GetSiameseNet
 from SiameseDataUtil import generatePairs, computeDistanceForPairs
 from common.Enums import DistanceMetrics, LossType
+from common.computeAccuracy import computeAccuracy
 import time
 import itertools
 
@@ -37,7 +38,7 @@ for metric, lossType, optimizer in itertools.product(metrics, lossTypes, optimiz
 
 	model = GetSiameseNet(input_dim,hidden_dim, lossType = lossType, optimizer = optimizer)
 
-	H = model.fit(distance, target, validation_split=.2, epochs = 10, class_weight = {1: 500, -1: 1})
+	H = model.fit(distance, target, validation_split=0, epochs = 2, class_weight = {1: 500, -1: 1})
 	model_json = model.to_json()
 	model.save_weights("model_"+ str(metric)+"_"+ lossType.name +"_"+optimizer+"_"+timestr+".h5")
 
