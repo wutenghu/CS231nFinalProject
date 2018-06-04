@@ -28,13 +28,12 @@ print (consumer_labels.shape)
 print (shop_features.shape)
 print (shop_labels.shape)
 
-metrics = [DistanceMetrics.L1] #, DistanceMetrics.L2, DistanceMetrics.Cosine] 
+metrics = [DistanceMetrics.L1] #, DistanceMetrics.L2
 top_k = [3,10,20,30,40,50]
 
 for metric in metrics:
-		print ("metric:", metric)
-		feat_distances = computeDistances(consumer_features, shop_features, metric = metric, model=model, batchSize = 100)
-		print (feat_distances.shape)
+		print ("Metric: {}".format(metric))
+
 
 		for k in top_k:
 			correct, total, accuracy = computeAccuracy(consumer_features,
