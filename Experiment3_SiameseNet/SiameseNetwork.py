@@ -13,7 +13,7 @@ def GetSiameseNet(input_dim, hidden_dim, final_activation = 'sigmoid', optimizer
 	if optimizer == 'rmsprop':
 		optimizer = RMSprop()
 	elif optimizer == 'sgd':
-		optimizer = SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True)
+		optimizer = SGD(lr=0.0001, decay=1e-6, momentum=0.9, nesterov=True)
 	else:
 		optimizer = Adam(lr = 0.001)
 

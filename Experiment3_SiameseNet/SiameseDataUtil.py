@@ -25,8 +25,8 @@ def LoadData(consumer_features, consumer_labels, shop_features, shop_labels, pai
 				index_metadata.append((j, s))
 				i +=1
 
-			shop_images_idx_neg = np.where(shop_labels != consumer_labels[j])[0][0:10]
-			# print ("shop_images_idx_neg", list(shop_images_idx_neg))
+			shop_images_idx_neg = np.where(shop_labels != consumer_labels[j])[0]#[0:10]
+			print ("shop_images_idx_neg", len(shop_images_idx_neg))
 			# add neagtive samples
 			for s in shop_images_idx_neg:
 				#pairs[0][i,:] = c
@@ -45,19 +45,21 @@ def LoadData(consumer_features, consumer_labels, shop_features, shop_labels, pai
 		triplets_0 = []
 		triplets_1 = []
 		triplets_2 = []
+		targets= [] 
 
-		for j,c in consumer_features:
+		for j,c in enumerate(consumer_features):
 			shop_images_idx = np.where(shop_labels == consumer_labels[j])
 			shop_images_idx_neg = np.where(shop_labels != consumer_labels[j])[0]
 			for s in shop_images_idx[0]:
 				triplets_0.append(c)
 				triplets_1.append(shop_features[s])
 				triplets_2.append(shop_features[np.random.choice(shop_images_idx_neg)])
+				targets.append(0)
 
-		print (np.asarray(triplets_0.shape))
-		print (np.asarray(triplets_1.shape))
-		print (np.asarray(triplets_2.shape))
-		return [np.asarray(triplets_0), np.asarray(triplets_1), np.asarray(triplets_2)]
+		print (np.asarray(triplets_0).shape)
+		print (np.asarray(triplets_1).shape)
+		print (np.asarray(triplets_2).shape)
+		return [np.asarray(triplets_0), np.asarray(triplets_1), np.asarray(triplets_2)], np.asarray(targets)
 
 def ComputeDistance(data, pairs=None, triplets=None, metric = DistanceMetrics.L1):
 	'''
@@ -74,12 +76,12 @@ def ComputeDistance(data, pairs=None, triplets=None, metric = DistanceMetrics.L1
 			return np.abs(difference)
 
 		elif metric == DistanceMetrics.L2:
-			difference = np.sqrt(np.power((consumer - shop),2))
+			difference = np.power((consumer - shop),2)
 			return difference
 
 		elif metric == DistanceMetrics.Cosine:
 			difference = 1 - consumer*shop
-			return difference
+			return difference	
 
 	if triplets==True:
 		consumer = data[0]
@@ -87,9 +89,9 @@ def ComputeDistance(data, pairs=None, triplets=None, metric = DistanceMetrics.L1
 		shop_neg = data[2]
 
 		if metric == DistanceMetrics.L1:
-			distance_positive = consumer - shop_pos
-			distance_negative = consumer - shop_neg
-			return np.abs(distance_positive - distance_negative)
+			distance_positive = np.abs(consumer - shop_pos)
+			distance_negative = np.abs(consumer - shop_neg)
+			return distance_positive - distance_negative
 
 		elif metric == DistanceMetrics.L2:
 			distance_positive = np.power((consumer - shop_pos),2)
