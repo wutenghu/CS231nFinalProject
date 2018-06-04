@@ -1,34 +1,33 @@
 import numpy as np
-from common.Enums import DistanceMetrics
+from common.Enums import DistanceMetrics, LossType
 
-def LoadData(consumer_features, consumer_labels, shop_features, shop_labels):
+def LoadData(consumer_features, consumer_labels, shop_features, shop_labels, lossType):
 	pairs_0 = []
 	pairs_1 = []
 	targets= [] #np.zeros((N,))
 	index_metadata = []
 
-	i = 0
 	for j,c in enumerate(consumer_features):
-		shop_images_idx = np.where(shop_labels == consumer_labels[j])
-		for s in shop_images_idx[0]:
+		shop_images_idx = np.where(shop_labels == consumer_labels[j])[0]
+		for s in shop_images_idx:
 			pairs_0.append(c)
 			pairs_1.append(shop_features[s])
 			targets.append(1)
 			index_metadata.append((j, s))
-			i +=1
 
-		shop_images_idx_neg = np.where(shop_labels != consumer_labels[j])[0][0:10]
+		shop_images_idx_neg = np.where(shop_labels != consumer_labels[j])[0]
 		# add neagtive samples
 		for s in shop_images_idx_neg:
-			#pairs[0][i,:] = c
 			pairs_0.append(c)
 			pairs_1.append(shop_features[s])
-			targets.append(0)
+			if (lossType == LossType.BinaryCrossEntropy):
+				targets.append(0)
+			elif (lossType == LossType.SVM):
+				targets.append(-1)
+			else:
+				raise Exception("Invalid loss type")
 			index_metadata.append((j, s))
-			i+=1
 
-	print (np.asarray(pairs_0).shape)
-	print (np.asarray(pairs_1).shape)
 	return [np.asarray(pairs_0), np.asarray(pairs_1)], np.asarray(targets), index_metadata
 
 def ComputeDistance(data, metric = DistanceMetrics.L1):
