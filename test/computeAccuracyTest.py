@@ -1,6 +1,6 @@
 import unittest
 import numpy as np
-from common.computeAccuracy import computeAccuracyUsingDistances
+from common.helpers.computeAccuracyUsingDistances import computeAccuracyUsingDistances
 
 class TestComputeAccuracy(unittest.TestCase):
 

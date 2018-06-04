@@ -1,8 +1,9 @@
 import unittest
-import numpy as np
-from keras.models import Model
+
 from keras.layers import Input, Dense
-from common.computeDistances import *
+
+from common.helpers.computeDistances import *
+
 
 class TestComputeDistance(unittest.TestCase):
 

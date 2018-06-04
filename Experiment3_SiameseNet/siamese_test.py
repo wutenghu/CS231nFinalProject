@@ -1,9 +1,8 @@
-from keras.models import model_from_json
-from common.computeDistances import computeDistances
-from common.computeAccuracy import computeAccuracy
-from common.Enums import DistanceMetrics
 import numpy as np
+from keras.models import model_from_json
 
+from common.Enums import DistanceMetrics
+from common.computeAccuracy import computeAccuracy
 
 MODEL_PATH = './model_DistanceMetrics.L1_sigmoid_sgd_20180602-143655.json'
 WEIGHTS_PATH = './model_DistanceMetrics.L1_sigmoid_sgd_20180602-143655.h5'

@@ -1,7 +1,7 @@
 import numpy as np
 import scipy.spatial.distance as scidist
 from keras.models import Model
-from .Enums import DistanceMetrics
+from common.Enums import DistanceMetrics
 
 
 def computeFeatureWiseMetric(consumer_batch, shop_features, metric):
