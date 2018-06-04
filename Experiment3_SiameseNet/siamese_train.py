@@ -3,6 +3,7 @@ from SiameseNetwork import GetSiameseNet
 from SiameseDataUtil import generatePairs, computeDistanceForPairs
 from common.Enums import DistanceMetrics, LossType
 import time
+import itertools
 
 DATA_DIR = '/Users/ckanitkar/Desktop/img_npy_final_features_only/DRESSES/Skirt/'
 
@@ -25,28 +26,27 @@ metrics = [DistanceMetrics.L1] #, DistanceMetrics.L2, DistanceMetrics.Cosine]
 lossTypes = [LossType.SVM]
 optimizers = ['sgd'] #, 'rmsprop', 'adam']
 
-for metric, lossType in zip(metrics, lossTypes):
+for metric, lossType, optimizer in itertools.product(metrics, lossTypes, optimizers):
+	print(metric, lossType, optimizer)
+
 	pair, target, _ = generatePairs(consumer_features, consumer_labels, shop_features, shop_labels, lossType = lossType)
 	distance = computeDistanceForPairs(pair, metric = metric)
 
 	input_dim = consumer_features.shape[-1]
 	hidden_dim = 2048
 
-	for optimizer in optimizers:
-		print ("optimizer:", optimizer)
-		model = GetSiameseNet(input_dim,hidden_dim, lossType = lossType, optimizer = optimizer)
+	model = GetSiameseNet(input_dim,hidden_dim, lossType = lossType, optimizer = optimizer)
 
-		#batch_size=32
-		H = model.fit(distance, target, validation_split=.2, epochs = 10, class_weight = {1: 500, 0: 1})
-		model_json = model.to_json()
-		model.save_weights("model_"+ str(metric)+"_"+ lossType.name +"_"+optimizer+"_"+timestr+".h5")
+	H = model.fit(distance, target, validation_split=.2, epochs = 10, class_weight = {1: 500, -1: 1})
+	model_json = model.to_json()
+	model.save_weights("model_"+ str(metric)+"_"+ lossType.name +"_"+optimizer+"_"+timestr+".h5")
 
-		#TODO: Print loss and accuracy
+	#TODO: Print loss and accuracy
 
-		# Save model
+	# Save model
 
-		with open("model_"+ str(metric)+"_"+ lossType.name + "_"+optimizer+"_"+timestr+".json", "w") as json_file:
-			json_file.write(model_json)
+	with open("model_"+ str(metric)+"_"+ lossType.name + "_"+optimizer+"_"+timestr+".json", "w") as json_file:
+		json_file.write(model_json)
 
 	
 

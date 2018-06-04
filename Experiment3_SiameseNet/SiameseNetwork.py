@@ -29,7 +29,7 @@ def GetSiameseNet(input_dim, hidden_dim, lossType, optimizer = 'adam'):
 	elif lossType == LossType.SVM:
 		output = Dense(1, activation='linear')(output)
 		siamese_net = Model(inputs=input, outputs=output)
-		siamese_net.compile(optimizer=optimizer, loss='binary_hinge')
+		siamese_net.compile(optimizer=optimizer, loss='hinge')
 
 	else:
 		raise Exception("Must provide a loss type")
