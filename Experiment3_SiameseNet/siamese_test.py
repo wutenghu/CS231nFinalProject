@@ -35,12 +35,12 @@ for metric in metrics:
 		print ("Metric: {}".format(metric))
 
 
-		for k in top_k:
-			correct, total, accuracy = computeAccuracy(consumer_features,
-													   shop_features,
-													   consumer_labels,
-													   shop_labels,
-													   metric = metric,
-													   model = model,
-													   k = k)
-			print ("Top" + str(k) + "accuracy:", accuracy)
+		accuracies = computeAccuracy(consumer_features,
+												   shop_features,
+												   consumer_labels,
+												   shop_labels,
+												   metric = metric,
+												   model = model,
+												   k = top_k)
+
+		print(accuracies)
