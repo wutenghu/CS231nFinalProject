@@ -32,8 +32,6 @@ for metric, lossType in zip(metrics, lossTypes):
 	input_dim = consumer_features.shape[-1]
 	hidden_dim = 2048
 
-	final_activation = ['sigmoid'] #, 'svm']
-
 	for optimizer in optimizers:
 		print ("optimizer:", optimizer)
 		model = GetSiameseNet(input_dim,hidden_dim, lossType = lossType, optimizer = optimizer)
