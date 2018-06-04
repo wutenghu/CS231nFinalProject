@@ -1,6 +1,6 @@
 import numpy as np
 from SiameseNetwork import GetSiameseNet
-from SiameseDataUtil import LoadData, ComputeDistance
+from SiameseDataUtil import generatePairs, computeDistanceForPairs
 from common.Enums import DistanceMetrics
 import time
 
@@ -25,8 +25,8 @@ metrics = [DistanceMetrics.L1] #, DistanceMetrics.L2, DistanceMetrics.Cosine]
 optimizers = ['sgd'] #, 'rmsprop', 'adam']
 
 for metric in metrics:
-	pair, target = LoadData(consumer_features, consumer_labels, shop_features, shop_labels, pairs=True)
-	distance = ComputeDistance(pair, pairs=True, metric = metric)
+	pair, target = generatePairs(consumer_features, consumer_labels, shop_features, shop_labels, pairs=True)
+	distance = computeDistanceForPairs(pair, metric = metric)
 
 	input_dim = consumer_features.shape[-1]
 	hidden_dim = 2048

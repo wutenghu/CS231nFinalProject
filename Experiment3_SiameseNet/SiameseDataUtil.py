@@ -1,7 +1,7 @@
 import numpy as np
 from common.Enums import DistanceMetrics, LossType
 
-def LoadData(consumer_features, consumer_labels, shop_features, shop_labels, lossType):
+def generatePairs(consumer_features, consumer_labels, shop_features, shop_labels, lossType):
 	pairs_0 = []
 	pairs_1 = []
 	targets= [] #np.zeros((N,))
@@ -30,7 +30,7 @@ def LoadData(consumer_features, consumer_labels, shop_features, shop_labels, los
 
 	return [np.asarray(pairs_0), np.asarray(pairs_1)], np.asarray(targets), index_metadata
 
-def ComputeDistance(data, metric = DistanceMetrics.L1):
+def computeDistanceForPairs(data, metric = DistanceMetrics.L1):
 	'''
 		data (pairs)  ((N,dim), (N,dim))
 		data (triplets) ((N,dim), (N,dim), (N,dim))
