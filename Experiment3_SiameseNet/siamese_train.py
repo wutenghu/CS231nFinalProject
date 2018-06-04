@@ -47,12 +47,10 @@ for metric, lossType in zip(metrics, lossTypes):
 
 			#TODO: Print loss and accuracy
 
-			if PAIRS:
-				with open("model_"+ str(metric)+"_"+activation+"_"+optimizer+"_"+timestr+".json", "w") as json_file:
-					json_file.write(model_json)
-			else:
-				with open("model_triplet_"+ str(metric)+"_" +activation+"_"+optimizer+"_"+timestr+".json", "w") as json_file:
-					json_file.write(model_json)
+			# Save model
+
+			with open("model_"+ str(metric)+"_"+activation+"_"+optimizer+"_"+timestr+".json", "w") as json_file:
+				json_file.write(model_json)
 
 	
 
