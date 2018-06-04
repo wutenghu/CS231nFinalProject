@@ -16,6 +16,7 @@ def generatePairs(consumer_features, consumer_labels, shop_features, shop_labels
 			index_metadata.append((j, s))
 
 		shop_images_idx_neg = np.where(shop_labels != consumer_labels[j])[0]
+		assert (len(shop_images_idx) + len(shop_images_idx_neg) == len(shop_labels)), 'Must select all shop images to train against'
 		# add neagtive samples
 		for s in shop_images_idx_neg:
 			pairs_0.append(c)
