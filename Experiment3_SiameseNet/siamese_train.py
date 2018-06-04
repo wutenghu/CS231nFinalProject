@@ -34,23 +34,21 @@ for metric, lossType in zip(metrics, lossTypes):
 
 	final_activation = ['sigmoid'] #, 'svm']
 
-	for activation in final_activation:
-		print ("activation:", activation)
-		for optimizer in optimizers:
-			print ("optimizer:", optimizer)
-			model = GetSiameseNet(input_dim,hidden_dim, final_activation = 'sigmoid', optimizer = optimizer)
+	for optimizer in optimizers:
+		print ("optimizer:", optimizer)
+		model = GetSiameseNet(input_dim,hidden_dim, final_activation = 'sigmoid', optimizer = optimizer)
 
-			#batch_size=32
-			H = model.fit(distance, target, validation_split=.2, epochs = 10, class_weight = {1: 500, 0: 1})
-			model_json = model.to_json()
-			model.save_weights("model_"+ str(metric)+"_"+activation+"_"+optimizer+"_"+timestr+".h5")
+		#batch_size=32
+		H = model.fit(distance, target, validation_split=.2, epochs = 10, class_weight = {1: 500, 0: 1})
+		model_json = model.to_json()
+		model.save_weights("model_"+ str(metric)+"_"+ lossType.name +"_"+optimizer+"_"+timestr+".h5")
 
-			#TODO: Print loss and accuracy
+		#TODO: Print loss and accuracy
 
-			# Save model
+		# Save model
 
-			with open("model_"+ str(metric)+"_"+activation+"_"+optimizer+"_"+timestr+".json", "w") as json_file:
-				json_file.write(model_json)
+		with open("model_"+ str(metric)+"_"+ lossType.name + "_"+optimizer+"_"+timestr+".json", "w") as json_file:
+			json_file.write(model_json)
 
 	
 
