@@ -1,7 +1,7 @@
 import numpy as np
 from SiameseNetwork import GetSiameseNet
 from SiameseDataUtil import LoadData, ComputeDistance
-from common.DistanceMetrics import DistanceMetrics
+from common.Enums import DistanceMetrics
 import time
 
 DATA_DIR = './img_npy_final_features_only/DRESSES/Skirt/'

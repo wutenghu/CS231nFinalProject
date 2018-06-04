@@ -1,5 +1,5 @@
 import numpy as np
-from common.DistanceMetrics import DistanceMetrics
+from common.Enums import DistanceMetrics
 
 def LoadData(consumer_features, consumer_labels, shop_features, shop_labels, pairs=None, triplets=None):
 	if pairs == True:

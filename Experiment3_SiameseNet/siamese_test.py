@@ -1,7 +1,7 @@
 from keras.models import model_from_json
 from common.computeDistances import computeDistances
 from common.computeAccuracy import computeAccuracy
-from common.DistanceMetrics import DistanceMetrics
+from common.Enums import DistanceMetrics
 import numpy as np
 
 

@@ -4,7 +4,7 @@ from SiameseDataUtil import LoadData, ComputeDistance
 
 from common.computeDistanceBetweenExtractedFeatures import computeDistances
 from common.computeAccuracy import computeAccuracy
-from common.DistanceMetrics import DistanceMetrics
+from common.Enums import DistanceMetrics
 
 DATA_DIR = './img_npy_final_features_only/CLOTHING/LowerBody/'
 
