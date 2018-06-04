@@ -40,7 +40,7 @@ for metric in metrics:
 			model = GetSiameseNet(input_dim,hidden_dim, final_activation = 'sigmoid', optimizer = optimizer)
 
 			#batch_size=32
-			H = model.fit(distance, target, validation_split=.2, epochs = 10)
+			H = model.fit(distance, target, validation_split=.2, epochs = 10, class_weight = {1: 500, 0: 1})
 			model_json = model.to_json()
 			model.save_weights("model_"+ str(metric)+"_"+activation+"_"+optimizer+"_"+timestr+".h5")
 
