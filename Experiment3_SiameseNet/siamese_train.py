@@ -9,16 +9,17 @@ import itertools
 DATA_DIR = '/Users/ckanitkar/Desktop/img_npy_feature_only_train_test_subsample/DRESSES/Skirt/'
 SHOP_DATA_DIR = '/Users/ckanitkar/Desktop/img_npy_feature_only/DRESSES/Skirt/'
 LABELS_DIR = '/Users/ckanitkar/Desktop/labels_only/DRESSES/Skirt/'
+FEATURE_TYPE = 'ResNet50'
 
-consumer_features = np.load(DATA_DIR + 'train_consumer_ResNet50_features.npy')
+consumer_features = np.load(DATA_DIR + 'train_consumer_{}_features.npy'.format(FEATURE_TYPE))
 consumer_labels = np.load(DATA_DIR + 'train_consumer_labels.npy')
 
 consumer_features = consumer_features[:200, :]
 consumer_labels = consumer_labels[:200]
-shop_features = np.load(SHOP_DATA_DIR + 'shop_ResNet50_features.npy')
+shop_features = np.load(SHOP_DATA_DIR + 'shop_{}_features.npy'.format(FEATURE_TYPE))
 shop_labels = np.load(LABELS_DIR + 'shop_labels.npy')
 
-test_consumer_features = np.load(DATA_DIR + 'test_consumer_ResNet50_features.npy')
+test_consumer_features = np.load(DATA_DIR + 'test_consumer_{}_features.npy'.format(FEATURE_TYPE))
 test_consumer_labels = np.load(DATA_DIR + 'test_consumer_labels.npy')
 
 print (consumer_features.shape)
