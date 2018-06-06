@@ -1,18 +1,18 @@
 import numpy as np
 import glob
 
-DIRECTORY_PATH = "/Users/ckanitkar/Desktop/img_npy_feature_only_temp/"
+DIRECTORY_PATH = "/Users/ckanitkar/Desktop/img_npy_feature_only_train_test_subsample/"
+SUBSAMPLE = 2000
 
 def splitData(dirName):
 
 
     consumer_labels = np.load(dirName + "consumer_labels.npy")
-
     N = consumer_labels.shape[0]
-    indices = np.random.permutation(N)
-    train_idx, test_idx = indices[:int(0.8 * N)], indices[int(0.8 * N):]
+    indices = np.random.permutation(N)[:SUBSAMPLE]
+    train_idx, test_idx = indices[:int(0.8 * SUBSAMPLE)], indices[int(0.8 * SUBSAMPLE):]
 
-    assert len(train_idx) + len(test_idx) == N, "Missing some indieces"
+    assert len(train_idx) + len(test_idx) == SUBSAMPLE, "Missing some indieces"
 
 
     # Save Lables

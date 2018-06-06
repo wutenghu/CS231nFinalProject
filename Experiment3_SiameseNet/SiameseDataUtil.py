@@ -1,7 +1,7 @@
 import numpy as np
 from common.Enums import DistanceMetrics, LossType
 
-def generatePairs(consumer_features, consumer_labels, shop_features, shop_labels, lossType):
+def generatePairs(consumer_features, consumer_labels, shop_features, shop_labels, lossType, verbose = 0):
 	assert consumer_features.shape[0] == consumer_labels.shape[0] and \
 			consumer_features.shape[1] == shop_features.shape[1] and \
 			shop_features.shape[0] == shop_labels.shape[0], "Invalid data size"
@@ -12,7 +12,8 @@ def generatePairs(consumer_features, consumer_labels, shop_features, shop_labels
 	index_metadata = []
 
 	for j,c in enumerate(consumer_features):
-		print("Generating pairs for consumer image {}".format(j))
+		if (verbose == 1):
+			print("Generating pairs for consumer image {}".format(j))
 		shop_images_idx = np.where(shop_labels == consumer_labels[j])[0]
 		for s in shop_images_idx:
 			pairs_0.append(c)
