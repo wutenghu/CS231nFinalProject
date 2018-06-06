@@ -26,7 +26,7 @@ def computeAccuracyUsingDistances(distances, consumer_labels, shop_labels, k = [
         total = distances.shape[0]
         print ("Correct: {} for k: {}".format(correct, k_val))
         accuracy = correct / total
-        print ("Accuracy: {} for k: ".format(accuracy, k_val))
+        print ("Accuracy: {} for k: {}".format(accuracy, k_val))
         output.append((correct, total, accuracy))
 
     assert len(output) == len(k)
