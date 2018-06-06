@@ -56,6 +56,8 @@ def computeDistances(consumer_features, shop_features, metric=DistanceMetrics.L1
           metric_string = 'cityblock'
       elif(metric == DistanceMetrics.L2):
           metric_string = 'euclidean'
+      elif (metric == DistanceMetrics.Cosine):
+          metric_string = 'cosine'
       else:
           raise Exception("Invalid Distance Metric")
       return scidist.cdist(consumer_features, shop_features, metric=metric_string)
