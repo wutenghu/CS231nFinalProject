@@ -6,13 +6,14 @@ from common.computeAccuracy import computeAccuracy
 import time
 import itertools
 
-DATA_DIR = '/Users/ckanitkar/Desktop/img_npy_final_features_only/DRESSES/Skirt/'
+DATA_DIR = './img_npy_feature_only/DRESSES/Skirt/'
+LABELS_DIR = './labels_only/DRESSES/Skirt/'
 
 
 consumer_features = np.load(DATA_DIR + 'consumer_ResNet50_features.npy')
-consumer_labels = np.load(DATA_DIR + 'consumer_labels.npy')
+consumer_labels = np.load(LABELS_DIR + 'consumer_labels.npy')
 shop_features = np.load(DATA_DIR + 'shop_ResNet50_features.npy')
-shop_labels = np.load(DATA_DIR + 'shop_labels.npy')
+shop_labels = np.load(LABELS_DIR + 'shop_labels.npy')
 
 print (consumer_features.shape)
 print (consumer_labels.shape)
@@ -24,7 +25,7 @@ print (shop_labels.shape)
 timestr = time.strftime("%Y%m%d-%H%M%S")
 
 metrics = [DistanceMetrics.L1] #, DistanceMetrics.L2, DistanceMetrics.Cosine]
-lossTypes = [LossType.SVM]
+lossTypes = [LossType.BinaryCrossEntropy] #LossType.SVM]
 optimizers = ['sgd'] #, 'rmsprop', 'adam']
 
 for metric, lossType, optimizer in itertools.product(metrics, lossTypes, optimizers):
@@ -40,7 +41,7 @@ for metric, lossType, optimizer in itertools.product(metrics, lossTypes, optimiz
 
 	model = GetSiameseNet(input_dim,hidden_dim, lossType = lossType, optimizer = optimizer)
 
-	H = model.fit(distance, target, validation_split=0, epochs = 2, class_weight = {1: 1, -1: 1})
+	H = model.fit(distance, target, validation_split=0, epochs = 2, class_weight = {1: 500, 0: 1})
 	model_json = model.to_json()
 	model.save_weights("model_"+ str(metric)+"_"+ lossType.name +"_"+optimizer+"_"+timestr+".h5")
 

@@ -6,7 +6,7 @@ from common.computeDistanceBetweenExtractedFeatures import computeDistances
 from common.computeAccuracy import computeAccuracy
 from common.Enums import DistanceMetrics
 
-DATA_DIR = './img_npy_final_features_only/CLOTHING/LowerBody/'
+DATA_DIR = './img_npy_features_only/DRESSES/Skirt/'
 
 consumer_features = np.load(DATA_DIR + 'consumer_ResNet50_features.npy')
 consumer_labels = np.load(DATA_DIR + 'consumer_labels.npy')
