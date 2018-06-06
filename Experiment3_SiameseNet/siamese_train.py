@@ -7,7 +7,7 @@ import time
 import itertools
 
 DIR_PREFIX = "/Users/ckanitkar/Desktop/"
-CLOTHING_TYPE = "DRESSES/Skirt/"
+CLOTHING_TYPE = "CLOTHING/LowerBody/"
 FEATURE_TYPE = 'ResNet50'
 POSITIVE_CLASS_WEIGHT = 500
 
@@ -36,7 +36,7 @@ timestr = time.strftime("%Y%m%d-%H%M%S")
 
 metrics = [DistanceMetrics.L1] #, DistanceMetrics.L2, DistanceMetrics.Cosine]
 lossTypes = [LossType.BinaryCrossEntropy] #LossType.SVM]
-optimizers = ['sgd'] #, 'rmsprop', 'adam']
+optimizers = ['adam'] #, 'rmsprop', 'adam']
 
 SAVE_MODEL = False
 BATCH_SIZE = 32
@@ -61,7 +61,7 @@ for metric, lossType, optimizer in itertools.product(metrics, lossTypes, optimiz
 			pair, target, _ = generatePairs(consumer_batch, consumer_labels_batch, shop_features, shop_labels, lossType = lossType)
 			distance = computeDistanceForPairs(pair, metric = metric)
 			negative_key = -1 if(lossType == LossType.SVM) else 0
-			model.fit(distance, target, validation_split=0, epochs=1, class_weight={1: POSITIVE_CLASS_WEIGHT, negative_key: 1})
+			model.fit(distance, target, validation_split=0, epochs=1, class_weight={1: POSITIVE_CLASS_WEIGHT, negative_key: 1}, verbose = 0)
 
 
 			print("Finished batch {} of {}".format(batch_iter, num_batches))
