@@ -6,12 +6,13 @@ from common.computeAccuracy import computeAccuracy
 import time
 import itertools
 
-CLOTHING_TYPE = "CLOTHING/LowerBody/"
+DIR_PREFIX = "/Users/ckanitkar/Desktop/"
+CLOTHING_TYPE = "DRESSES/Skirt/"
 FEATURE_TYPE = 'ResNet50'
 
-DATA_DIR = '/Users/ckanitkar/Desktop/img_npy_feature_only_train_test_subsample/' + CLOTHING_TYPE
-SHOP_DATA_DIR = '/Users/ckanitkar/Desktop/img_npy_feature_only/' + CLOTHING_TYPE
-LABELS_DIR = '/Users/ckanitkar/Desktop/labels_only/' + CLOTHING_TYPE
+DATA_DIR = DIR_PREFIX + 'img_npy_feature_only_train_test_subsample/' + CLOTHING_TYPE
+SHOP_DATA_DIR = DIR_PREFIX + 'img_npy_feature_only/' + CLOTHING_TYPE
+LABELS_DIR = DIR_PREFIX + 'labels_only/' + CLOTHING_TYPE
 
 
 consumer_features = np.load(DATA_DIR + 'train_consumer_{}_features.npy'.format(FEATURE_TYPE))
