@@ -18,24 +18,28 @@ SHOP_DATA_DIR = DIR_PREFIX + 'img_npy_feature_only/' + CLOTHING_TYPE
 LABELS_DIR = DIR_PREFIX + 'labels_only/' + CLOTHING_TYPE
 
 
-POSITIVE_CLASS_WEIGHT = 500
-HIDDEN_DIM = 2048
 
 
+optimizers = ['sgd'] #, 'rmsprop', 'adam']
 metrics = [DistanceMetrics.L1] #, DistanceMetrics.L2, DistanceMetrics.Cosine]
 lossTypes = [LossType.BinaryCrossEntropy] #LossType.SVM]
-optimizers = ['sgd'] #, 'rmsprop', 'adam']
+positive_class_weights = [500]
+hidden_dims = [2048]
+hidden_layers = [1]
+learning_rates = [.0001]
+
 
 SAVE_MODEL = False
 BATCH_SIZE = 32
 EPOCHS = 2
-
 
 consumer_features = np.load(DATA_DIR + 'train_consumer_{}_features.npy'.format(FEATURE_TYPE))
 consumer_labels = np.load(DATA_DIR + 'train_consumer_labels.npy')
 
 consumer_features = consumer_features[:200, :]
 consumer_labels = consumer_labels[:200]
+
+
 shop_features = np.load(SHOP_DATA_DIR + 'shop_{}_features.npy'.format(FEATURE_TYPE))
 shop_labels = np.load(LABELS_DIR + 'shop_labels.npy')
 
@@ -49,12 +53,12 @@ print (shop_labels.shape)
 
 timestr = time.strftime("%Y%m%d-%H%M%S")
 
-for metric, lossType, optimizer in itertools.product(metrics, lossTypes, optimizers):
-	print(metric, lossType, optimizer)
+for metric, lossType, optimizer, positive_class_weight, learning_rate, hidden_layer, hidden_dim in itertools.product(metrics, lossTypes, optimizers, positive_class_weights, learning_rates, hidden_layers, hidden_dims):
+	print(metric, lossType, optimizer, positive_class_weight, hidden_layer, hidden_dim)
 
 	# Set up model
 	input_dim = consumer_features.shape[-1]
-	model = GetSiameseNet(input_dim, HIDDEN_DIM, lossType = lossType, optimizer = optimizer)
+	model = GetSiameseNet(input_dim, hidden_dim, lossType = lossType, optimizer = optimizer, learning_rate = learning_rate, num_hidden_layers = hidden_layer)
 
 	for epoch in range(EPOCHS):
 		print("Epoch", epoch)
@@ -68,7 +72,7 @@ for metric, lossType, optimizer in itertools.product(metrics, lossTypes, optimiz
 			pair, target, _ = generatePairs(consumer_batch, consumer_labels_batch, shop_features, shop_labels, lossType = lossType)
 			distance = computeDistanceForPairs(pair, metric = metric)
 			negative_key = -1 if(lossType == LossType.SVM) else 0
-			model.fit(distance, target, validation_split=0, epochs=1, class_weight={1: POSITIVE_CLASS_WEIGHT, negative_key: 1}, verbose = 1)
+			model.fit(distance, target, validation_split=0, epochs=1, class_weight={1: positive_class_weight, negative_key: 1}, verbose = 1)
 
 			print("Precision Recall on batch")
 			preds = model.predict(distance)

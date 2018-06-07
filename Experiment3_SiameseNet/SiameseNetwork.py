@@ -7,17 +7,20 @@ from keras.losses import binary_crossentropy
 from common.Enums import LossType
 
 
-def GetSiameseNet(input_dim, hidden_dim, lossType, optimizer = 'adam'):
+def GetSiameseNet(input_dim, hidden_dim, lossType, learning_rate, num_hidden_layers = 1, optimizer = 'adam'):
+	assert isinstance(learning_rate, float)
 	input = Input(shape=(input_dim,))
-	output = Dense(hidden_dim, activation='relu')(input)
+	output = input
+	for i in range(num_hidden_layers):
+		output = Dense(hidden_dim, activation='relu')(output)
 
 	if optimizer == 'rmsprop':
-		optimizer = RMSprop()
+		optimizer = RMSprop(lr = learning_rate)
 	elif optimizer == 'sgd':
 		# optimizer = SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True)
-		optimizer = SGD(lr=0.0001, decay=1e-6, momentum=0.9, nesterov=True)
+		optimizer = SGD(lr=learning_rate, decay=1e-6, momentum=0.9, nesterov=True)
 	else:
-		optimizer = Adam(lr = 0.001)
+		optimizer = Adam(lr = learning_rate)
 
 	# sigmoid loss
 	if lossType == LossType.BinaryCrossEntropy:
