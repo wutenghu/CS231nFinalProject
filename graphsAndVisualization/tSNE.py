@@ -23,7 +23,7 @@ def plot_embedding(X, title=None):
         shown_images = np.array([[1., 1.]])  # just something big
         for i in range(X.shape[0]):
             dist = np.sum((X[i] - shown_images) ** 2, 1)
-            if np.min(dist) <5e-3:
+            if np.min(dist) <1e-3:
                 # don't show points that are too close
                 continue
             shown_images = np.r_[shown_images, [X[i]]]
@@ -89,7 +89,7 @@ clothingtypes = ["consumer"]
 #ONLY USE CONSUMER EMBEDDINGS. THEY ARE MUCH BETTER
 X_tsne = np.load("cross_category_embedding.npy")
 photos = np.load("cross_category_photos.npy").transpose([0, 2,3,1])
-photos = resizeImage(photos, 64)
+photos = resizeImage(photos, 32)
 print(photos.shape)
 print(X_tsne.shape)
 

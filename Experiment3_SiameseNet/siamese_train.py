@@ -22,7 +22,7 @@ LABELS_DIR = DIR_PREFIX + 'labels_only/' + CLOTHING_TYPE
 
 optimizers = ['sgd'] #, 'rmsprop', 'adam']
 metrics = [DistanceMetrics.L1] #, DistanceMetrics.L2, DistanceMetrics.Cosine]
-lossTypes = [LossType.BinaryCrossEntropy] #LossType.SVM]
+lossTypes = [LossType.SVM] #LossType.SVM]
 positive_class_weights = [500]
 hidden_dims = [2048]
 hidden_layers = [1]
@@ -54,7 +54,7 @@ print (shop_labels.shape)
 timestr = time.strftime("%Y%m%d-%H%M%S")
 
 for metric, lossType, optimizer, positive_class_weight, learning_rate, hidden_layer, hidden_dim in itertools.product(metrics, lossTypes, optimizers, positive_class_weights, learning_rates, hidden_layers, hidden_dims):
-	print(metric, lossType, optimizer, positive_class_weight, hidden_layer, hidden_dim)
+	print(metric, lossType, optimizer, positive_class_weight, learning_rate, hidden_layer, hidden_dim)
 
 	# Set up model
 	input_dim = consumer_features.shape[-1]
