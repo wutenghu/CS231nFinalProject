@@ -36,10 +36,6 @@ def plot_embedding(X, title=None):
         plt.title(title)
 
 
-
-
-
-
 photos = np.load("/Users/ckanitkar/Desktop/photos_rgb_only/CLOTHING/LowerBody/consumer_photos.npy").transpose(
     [0, 2, 3, 1])
 #print(X.shape)
